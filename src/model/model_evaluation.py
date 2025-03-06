@@ -5,8 +5,7 @@ import logging
 import yaml
 import mlflow
 import mlflow.sklearn
-from sklearn.metrics import classification_report, confusion_matrix, ConfusionMatrixDisplay
-from sklearn.metrics import classification_report
+from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.feature_extraction.text import TfidfVectorizer
 import os
 import matplotlib.pyplot as plt
@@ -85,29 +84,8 @@ def evaluate_model(model, X_test: np.ndarray, y_test: np.ndarray):
     try:
         # Predict and calculate classification metrics
         y_pred = model.predict(X_test)
-
-        # Get class labels from data instead of model
-        class_labels = sorted(np.unique(y_test).astype(str))
-
-        print("\nClassification Report:")
-        print(classification_report(y_test, y_pred, target_names=class_labels))
-
-        # Create and display confusion matrix
-        cm = confusion_matrix(y_test, y_pred)
-        disp = ConfusionMatrixDisplay(confusion_matrix=cm,
-                                     display_labels=class_labels)
-        disp.plot()
-        plt.savefig('confusion_matrix.png')
-
-        # Log metrics to MLflow
         report = classification_report(y_test, y_pred, output_dict=True)
-        for label in class_labels:
-            mlflow.log_metric(f"precision_{label}", report[label]['precision'])
-            mlflow.log_metric(f"recall_{label}", report[label]['recall'])
-            mlflow.log_metric(f"f1_{label}", report[label]['f1-score'])
-
-        print("\nConfusion Matrix:")
-        print(cm)
+        cm = confusion_matrix(y_test, y_pred)
         
         logger.debug('Model evaluation completed')
 
@@ -149,12 +127,9 @@ def save_model_info(run_id: str, model_path: str, file_path: str) -> None:
 
 
 def main():
-    # mlflow.set_tracking_uri("http://ec2-54-196-109-131.compute-1.amazonaws.com:5000/")
+    mlflow.set_tracking_uri("http://ec2-13-60-156-50.eu-north-1.compute.amazonaws.com:5000/")
 
-    # mlflow.set_experiment('dvc-pipeline-runs')
-    mlflow.set_tracking_uri("file:///mlruns")  # Local file storage
     mlflow.set_experiment('dvc-pipeline-runs')
-    
     
     with mlflow.start_run() as run:
         try:
