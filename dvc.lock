@@ -5,8 +5,8 @@ stages:
     deps:
     - path: src/data/data_ingestion.py
       hash: md5
-      md5: caaf549d488798bd2084e75336efb97f
-      size: 4219
+      md5: 49cd2bd15c519e46bf0602b476be0011
+      size: 4220
     params:
       params.yaml:
         data_ingestion.test_size: 0.2
@@ -64,7 +64,7 @@ stages:
       size: 4105035
     - path: tfidf_vectorizer.pkl
       hash: md5
-      md5: d42da3eb370fa063e57ad0af2e6083cc
+      md5: 4ae97b0f87ffe54642adce6651c9d76a
       size: 384148
   model_evaluation:
     cmd: python src/model/model_evaluation.py
@@ -87,19 +87,19 @@ stages:
       size: 7128
     - path: tfidf_vectorizer.pkl
       hash: md5
-      md5: d42da3eb370fa063e57ad0af2e6083cc
+      md5: 4ae97b0f87ffe54642adce6651c9d76a
       size: 384148
     outs:
     - path: experiment_info.json
       hash: md5
-      md5: ab78d5dd6537d85697900e2664ade762
+      md5: 0d19e5694d77944d0cba1ee6631a52cf
       size: 84
   model_registration:
     cmd: python src/model/register_model.py
     deps:
     - path: experiment_info.json
       hash: md5
-      md5: ab78d5dd6537d85697900e2664ade762
+      md5: 0d19e5694d77944d0cba1ee6631a52cf
       size: 84
     - path: src/model/register_model.py
       hash: md5
